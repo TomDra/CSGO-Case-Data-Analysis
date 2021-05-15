@@ -39,7 +39,7 @@ def cases(out):
     clist = str(r.content).replace("b'",'').split('<div class="col-lg-4 col-md-6 col-widen text-center">')
     for c in clist:
         if '<div class="well result-box nomargin">' in c:
-            price = c.split('<p class="nomargin">')[1].split('</p>')[0].replace('\\xc2\\xa3','')
+            price = c.split('<p class="nomargin">')[1].split('</p>')[0].replace('\\xc2\\xa3','').replace('$','')
             case_name = c.split('<h4>')[1].split('</h4>')[0]
             cases.append(ast.literal_eval((f'["{case_name}","{price}"]')))
     print(cases)
@@ -64,9 +64,8 @@ def cases(out):
         except IndexError:
             print('Ignoring '+case[0])
         items_web.close()
-
+        time.sleep(13)
         f.write(case[0]+':::'+case[1]+':::'+str(items)+'\n')
-        time.sleep(12.9)
     print(f'Case Compiler Took - {time.time()-time_}')
     f.close()
 
@@ -103,7 +102,7 @@ def extract(html):
     else:
         stattrak = False
     wear = html[temp].replace('<span class="pull-left">','').replace('</span>','').replace('<span class="pull-left price-details-st">','')
-    price = html[temp+1].replace('<span class="pull-right">','').replace('</span>','').replace('<span class="pull-left">','').replace('£','')
+    price = html[temp+1].replace('<span class="pull-right">','').replace('</span>','').replace('<span class="pull-left">','').replace('£','').replace('$','')
     return [stattrak,wear,price]
 
 
@@ -209,9 +208,11 @@ def item_case_search():
     case_file = 'cases.txt'
     price_file = 'skins.txt'
     stash_ids = 'csgo_stash_ids.txt'
+    #results = 'results_output.txt'
     files = [case_file,price_file,stash_ids]
     cases(case_file)
-    csgo_stash_ids(stash_ids)
+    if not os.path.exists(stash_ids):
+      csgo_stash_ids(stash_ids)
     skin_prices(stash_ids,case_file,price_file)
     archive(files)
 

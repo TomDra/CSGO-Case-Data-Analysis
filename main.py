@@ -9,7 +9,7 @@ def avg_revenue_per_case():
     if not os.path.exists('temp'):
         os.makedirs('temp')
     out_file = open('temp/values.txt','w+')
-    inp_file = open('Prices/current/skins.txt','r')
+    inp_file = open('current/skins.txt','r')
     for i in inp_file.readlines():
         skins.append(i.replace('\n',''))
     for skin in skins:
@@ -23,7 +23,7 @@ def avg_revenue_per_case():
                 prob = float(ast.literal_eval(skins[i])[2][0]) * ((9/10)*float(ast.literal_eval(skins[i])[3]))
                 probabilities.append([case,stat_trak_prob+prob])
     new_list = []
-    case_prices = open('Prices/current/cases.txt','r')
+    case_prices = open('current/cases.txt','r')
     dic = '{'
     for case_price_line in case_prices.readlines():
         case_price_line = case_price_line.split(':::')
