@@ -110,14 +110,14 @@ def extract(html):
 def csgostash_price(ids,skin):
     remove = ['(',')',"'",'.','<','>']
     prices = []
-    converted_skin = skin.replace(' | ','-').replace(' ','-').replace('\\u9f8d\\u738b','%E9%BE%8D%E7%8E%8B')
+    converted_skin = skin.replace(' | ','-').replace(' ','-').replace('\\u9f8d\\u738b','%E9%BE%8D%E7%8E%8B').replace('_','-')
     for rem in remove:
         converted_skin = converted_skin.replace(rem,'')
     id_file = open(ids,'r')
     try:
         id_contents = id_file.read().split(converted_skin)[1]
-        id = id_contents.replace('<', '').replace('>', '')
-        website = requests.get((f'https://csgostash.com/skin/{id}'))
+        s_id = id_contents.replace('<', '').replace('>', '')
+        website = requests.get((f'https://csgostash.com/skin/{s_id}'))
         r = website.text.split('<div class="btn-group-sm btn-group-justified">')
         if '<span class="pull-left price-details-st">StatTrak</span>' in r[2].split('\n'):
             for i in range(2,2+10):
