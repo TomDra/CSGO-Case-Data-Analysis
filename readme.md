@@ -10,7 +10,7 @@ The code should have no need to be changed when a new case gets released, unless
 - Install requests module - `pip install requests`
 - It can take about 15 mins to compile all the data it needs
 - Run main.py
-- Currently the Program outputs the result in the terminal.
+- Program outputs the result in the results.txt file located in /current
 
 ## Help
 
