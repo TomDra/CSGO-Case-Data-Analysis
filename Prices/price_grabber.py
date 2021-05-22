@@ -66,11 +66,11 @@ def cases(out):
         items_web.close()
         time.sleep(13)
         f.write(case[0]+':::'+case[1]+':::'+str(items)+'\n')
-    print(f'Case Compiler Took - {time.time()-time_}')
+    print(f'Case Compiler Took - {(time.time()-time_)/60} mins')
     f.close()
 
 def csgo_stash_ids(file):
-    print('Starting the csgoStash ID compiler (Approx 10 minutes):')
+    print('Starting the csgoStash ID compiler (Approx 7 minutes):')
     i=1
     names=[]
     end=[]
@@ -189,7 +189,7 @@ def skin_prices(ids,inp,out):
     for skin in skins:
         ofile.write(str(skin)+'\n')
     ofile.close()
-    print(f'Compleated searching skin prices, took - {time.time()-total_time}')
+    print(f'Compleated searching skin prices, took - {(time.time()-total_time)/60} mins')
 
 def archive(files):
     if os.path.exists(f'current/'):
@@ -204,16 +204,13 @@ def archive(files):
         os.rename(str(file), f'current/{file}')
 
 
-def item_case_search():
-    case_file = 'cases.txt'
-    price_file = 'skins.txt'
-    stash_ids = 'csgo_stash_ids.txt'
-    #results = 'results_output.txt'
-    files = [case_file,price_file,stash_ids]
+def item_case_search(files):
+    case_file = files[0]
+    price_file = files[1]
+    stash_ids = files[2]
     cases(case_file)
     if not os.path.exists(stash_ids):
       csgo_stash_ids(stash_ids)
     skin_prices(stash_ids,case_file,price_file)
-    archive(files)
 
-item_case_search()
+
