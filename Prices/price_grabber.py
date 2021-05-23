@@ -4,7 +4,6 @@ import time
 import datetime
 import shutil
 import os
-#from archive_files import *
 
 rarity = {
     '4b69ff':'Mil-spec',
@@ -53,7 +52,6 @@ def cases(out):
                 print('             Too Many Requests!')
             dic = (str(items_web.content).split('var g_rgAssets')[1].split('{"type":"html","value":"Contains one of the following:"}')[1].split(f',"name":"{case[0]}"')[0].split(',"tradable"')[0])
             dic = '['+dic[1:len(dic)]
-            #print(('https://steamcommunity.com/market/listings/730/'+case[0]).replace(' ','%20'),dic)
             dic = ast.literal_eval(dic)
             dic = dic[0:len(dic)-3]
             for i in range(0,len(dic)):
@@ -106,7 +104,6 @@ def extract(html):
     return [stattrak,wear,price]
 
 
-
 def csgostash_price(ids,skin):
     remove = ['(',')',"'",'.','<','>']
     prices = []
@@ -157,7 +154,6 @@ def csgostash_price(ids,skin):
         avg_prices = [avg_nonstattrak,avg_stattrak]
     except Exception as e:
         print(converted_skin,e)
-
     id_file.close()
     return avg_prices
 
@@ -177,7 +173,6 @@ def skin_prices(ids,inp,out):
         for all_wear in all_wears:
             count = iline.count(all_wear)
             amount = f"{amount} '{all_wear}':{count},"
-            #print(f'{count} {all_wear} in {case}')
         amount = ast.literal_eval((amount+'}').replace(',}','}'))
         for skin_list in ast.literal_eval(cases[2]):
             wear = skin_list[1]
@@ -203,19 +198,6 @@ def archive(files):
         shutil.copy(f'{file}', f'archive/{add_date(file)}')
         os.rename(str(file), f'current/{file}')
 
-def run_parallel(functions):
-    from multiprocessing import Process
-
-
-
-    processes = []
-    for function in functions:
-        proc = Process(target=function)
-        proc.start()
-        processes.append(proc)
-    for proc in processes:
-        proc.join()
-
 def item_case_search(files):
     import multiprocessing
     case_file = files[0]
@@ -230,15 +212,6 @@ def item_case_search(files):
     processes.append(p)
     for p in processes:
         p.join()
-    #cases(case_file).start()
-    #csgo_stash_ids(stash_ids).start()
-    #csgo_stash_ids(stash_ids).join()
-    #cases(case_file).join()
-    #run_parallel([cases(case_file), csgo_stash_ids(stash_ids)])
     skin_prices(stash_ids, case_file, price_file)
-    #cases(case_file)
     #if not os.path.exists(stash_ids):
       #csgo_stash_ids(stash_ids)
-    #skin_prices(stash_ids,case_file,price_file)
-
-

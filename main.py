@@ -15,7 +15,6 @@ def avg_revenue_per_case():
         skins.append(i.replace('\n',''))
     for skin in skins:
         cases.append(ast.literal_eval(skin)[0])
-        #print(skin)
     cases = list(dict.fromkeys(cases))
     for case in cases:
         for i in range(0,len(skins)):
@@ -37,7 +36,6 @@ def avg_revenue_per_case():
                 addition=addition+pro[1]
 
         new_list.append([case,addition-1.89-float(case_price_dic[case])])
-    #print(ast.literal_eval(inp_file.readlines().replace('\n','')))
     inp_file.close()
     out_file.close()
     return new_list
