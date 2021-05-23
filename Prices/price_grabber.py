@@ -60,7 +60,7 @@ def cases(out):
                 gun = (dic[i]['value'])
                 rareness = rarity[dic[i]['color']]
                 items.append([gun,rareness])
-            print(f'{case[0]} - {items_web}, took {time.time()-start_time} seconds')
+            print(f'[Case_Compiler] ~ {case[0]}, {items_web}, took {time.time()-start_time} seconds')
         except IndexError:
             print('Ignoring '+case[0])
         items_web.close()
@@ -70,7 +70,7 @@ def cases(out):
     f.close()
 
 def csgo_stash_ids(file):
-    print('Starting the csgoStash ID compiler (Approx 7 minutes):')
+    print('Starting the CsgoStash ID compiler (Approx 7 minutes):')
     i=1
     names=[]
     end=[]
@@ -89,7 +89,7 @@ def csgo_stash_ids(file):
             print(f'Stopped at - {i-30}, total time - {(time.time() - start_time)/60} minutes')
             break
         if i%50==0:
-            print(f'Found - {i}, took - {time.time() - prev_time} seconds')
+            print(f'[Csgo_Stash_Ids] ~ Found {i} Ids, took {time.time() - prev_time} seconds')
             prev_time = time.time()
         i=i+1
 
@@ -203,14 +203,42 @@ def archive(files):
         shutil.copy(f'{file}', f'archive/{add_date(file)}')
         os.rename(str(file), f'current/{file}')
 
+def run_parallel(functions):
+    from multiprocessing import Process
+
+
+
+    processes = []
+    for function in functions:
+        proc = Process(target=function)
+        proc.start()
+        processes.append(proc)
+    for proc in processes:
+        proc.join()
 
 def item_case_search(files):
+    import multiprocessing
     case_file = files[0]
     price_file = files[1]
     stash_ids = files[2]
-    cases(case_file)
-    if not os.path.exists(stash_ids):
-      csgo_stash_ids(stash_ids)
-    skin_prices(stash_ids,case_file,price_file)
+    processes = []
+    p = multiprocessing.Process(target=cases, args=[case_file])
+    p.start()
+    processes.append(p)
+    p = multiprocessing.Process(target=csgo_stash_ids, args=[stash_ids])
+    p.start()
+    processes.append(p)
+    for p in processes:
+        p.join()
+    #cases(case_file).start()
+    #csgo_stash_ids(stash_ids).start()
+    #csgo_stash_ids(stash_ids).join()
+    #cases(case_file).join()
+    #run_parallel([cases(case_file), csgo_stash_ids(stash_ids)])
+    skin_prices(stash_ids, case_file, price_file)
+    #cases(case_file)
+    #if not os.path.exists(stash_ids):
+      #csgo_stash_ids(stash_ids)
+    #skin_prices(stash_ids,case_file,price_file)
 
 
