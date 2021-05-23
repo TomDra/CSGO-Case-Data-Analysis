@@ -8,6 +8,7 @@ The code should have no need to be changed when a new case gets released, unless
 
 - Install python 3
 - Install requests module - `pip install requests`
+- Install multiprocessing module - `pip install multiprocessing`
 - It can take about 15 mins to compile all the data it needs
 - Run main.py
 - Program outputs the result in the results.txt file located in /current
