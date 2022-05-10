@@ -39,7 +39,7 @@ def cases(out):
     for c in clist:
         if '<div class="well result-box nomargin">' in c:
             price = c.split('<p class="nomargin">')[1].split('</p>')[0].replace('\\xc2\\xa3','').replace('$','')
-            case_name = c.split('<h4>')[1].split('</h4>')[0]
+            case_name = c.split('<h4>')[1].split('</h4>')[0].replace('amp;','')
             cases.append(ast.literal_eval((f'["{case_name}","{price}"]')))
     print(cases)
 
