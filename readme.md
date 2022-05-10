@@ -26,6 +26,7 @@ Gets average price of each skin of each rarity and stattrack of each case accord
 
 ## Example Results (10/05/2022)
 
+```
 CS:GO Weapon Case 3 ~ -0.49065092733333415
 Shadow Case ~ -0.5353895642857143
 Operation Wildfire Case ~ -0.7451264979999995
@@ -63,4 +64,4 @@ Operation Hydra Case ~ -8.945994573523809
 Operation Bravo Case ~ -19.98586110333333
 eSports 2013 Case ~ -20.09925230222222
 CS:GO Weapon Case ~ -20.73005133333333
-
+```
