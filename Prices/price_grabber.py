@@ -31,7 +31,8 @@ def add_date(file):
 
 
 def cases(out):
-    print('Starting Case Compiler (Approx 8 mins):')
+    """ Creates a list of all cases, their price and every skin inside the case and add it to the file given (out) """
+    print('Starting Case Compiler (Approx 9 mins):')
     time_ = time.time()
     cases = []
     r = requests.get('https://csgostash.com/containers/skin-cases')
@@ -41,7 +42,7 @@ def cases(out):
         if '<div class="well result-box nomargin">' in c:
             price = c.split('<p class="nomargin">')[1].split('</p>')[0].replace('\\xc2\\xa3', '').replace('$', '')
             case_name = c.split('<h4>')[1].split('</h4>')[0].replace('amp;', '')
-            cases.append(ast.literal_eval((f'["{case_name}","{price}"]')))
+            cases.append(ast.literal_eval(f'["{case_name}","{price}"]'))
     print(cases)
 
     for case in cases:
@@ -55,24 +56,24 @@ def cases(out):
                 '{"type":"html","value":"Contains one of the following:"}')[1].split(f',"name":"{case[0]}"')[0].split(
                 ',"tradable"')[0])
             dic = '[' + dic[1:len(dic)]
-            dic = ast.literal_eval(dic)
+            dic = ast.literal_eval(dic)  # Creates a list of all the items in the case
             dic = dic[0:len(dic) - 3]
             for i in range(0, len(dic)):
                 gun = (dic[i]['value']).replace('\\u2665', '')
                 rareness = rarity[dic[i]['color']]
-                items.append([gun, rareness])
+                items.append([gun, rareness])  # Adds each run and its rarity to the list
             print(f'[Case_Compiler] ~ {case[0]}, {items_web}, took {time.time() - start_time} seconds')
-        except IndexError:
-            print('Ignoring ' + case[0])
+        except IndexError as e:
+            print('Ignoring ' + case[0], e)
         items_web.close()
-        time.sleep(15)
+        time.sleep(17)
         f.write(case[0] + ':::' + case[1] + ':::' + str(items) + '\n')
     print(f'Case Compiler Took - {(time.time() - time_) / 60} mins')
     f.close()
 
 
 def csgo_stash_ids(file):
-    print('Starting the CsgoStash ID compiler (Approx 7 minutes):')
+    print('Starting the CsgoStash ID compiler (Approx 19 minutes):')
     i = 0
     names = []
     end = []
@@ -167,7 +168,7 @@ def csgostash_price(ids, skin):
 
 def skin_prices(ids, inp, out):
     total_time = time.time()
-    print('Getting all case skin prices (Approx 9 mins):')
+    print('Getting all case skin prices (Approx 7 mins):')
     skins = []
     ifile = open(str(inp), 'r')
     ofile = open(str(out), 'w+')
@@ -214,10 +215,10 @@ def item_case_search(files):
     price_file = files[1]
     stash_ids = files[2]
     processes = []
-    p = multiprocessing.Process(target=cases, args=case_file, )
+    p = multiprocessing.Process(target=cases, args=[case_file])
     p.start()
     processes.append(p)
-    p = multiprocessing.Process(target=csgo_stash_ids, args=stash_ids, )
+    p = multiprocessing.Process(target=csgo_stash_ids, args=[stash_ids])
     p.start()
     processes.append(p)
     for p in processes:
