@@ -24,8 +24,7 @@ Gets average price of each skin of each rarity and stat-track of each case accor
 	But the code should work fine
 
 
-## Example Results:
-####(10/05/2022)
+## Example Results (10/05/2022):
 ```
 CS:GO Weapon Case 3 ~ -0.49065092733333415
 Shadow Case ~ -0.5353895642857143
