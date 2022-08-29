@@ -35,7 +35,7 @@ def avg_revenue_per_case():
         for pro in probabilities:
             if pro[0] == case:
                 addition = addition + pro[1]
-        new_list.append([case, addition - 1.89 - float(case_price_dic[case])])
+        new_list.append([case, addition - 1.99 - float(case_price_dic[case])])
     inp_file.close()
     out_file.close()
     return new_list
