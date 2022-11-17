@@ -66,7 +66,7 @@ def cases(out):
         except IndexError as e:
             print('Ignoring ' + case[0], e)
         items_web.close()
-        time.sleep(17)
+        time.sleep(20)
         f.write(case[0] + ':::' + case[1] + ':::' + str(items) + '\n')
     print(f'Case Compiler Took - {(time.time() - time_) / 60} mins')
     f.close()
