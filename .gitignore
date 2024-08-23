@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 *.txt
 .idea/
+/error_message.html

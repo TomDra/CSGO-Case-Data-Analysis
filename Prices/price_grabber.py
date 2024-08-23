@@ -4,6 +4,7 @@ import time
 import datetime
 import shutil
 import os
+from bs4 import BeautifulSoup
 
 rarity = {
     '4b69ff': 'Mil-spec',
@@ -31,18 +32,36 @@ def add_date(file):
 
 
 def cases(out):
-    """ Creates a list of all cases, their price and every skin inside the case and add it to the file given (out) """
     print('Starting Case Compiler (Approx 9 mins):')
-    time_ = time.time()
+    start_time = time.time()
+
+    url = 'https://stash.clash.gg/containers/skin-cases'
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        print(f"Failed to retrieve data: {response.status_code}, saved error message to error_message.html")
+        with open('error_message.html', 'w+') as f:
+            f.write(str(response.content.decode("utf-8")))
+            f.close()
+        return
+
+    soup = BeautifulSoup(response.content, 'html.parser')
     cases = []
-    r = requests.get('https://csgostash.com/containers/skin-cases')
+
+    case_divs = soup.find_all('div', class_='col-lg-4 col-md-6 col-widen text-center')
+
+    for case_div in case_divs:
+        try:
+            case_name = case_div.find('h4').text.strip()
+            price_tag = case_div.find('p', class_='nomargin')
+            price = price_tag.text.strip().replace('£', '').replace('$', '') if price_tag else 'N/A'
+
+            cases.append([case_name, price])
+        except AttributeError as e:
+            print(f"An error occurred while parsing a case: {e}")
+            continue
+
     f = open(out, 'w+')
-    clist = str(r.content).replace("b'", '').split('<div class="col-lg-4 col-md-6 col-widen text-center">')
-    for c in clist:
-        if '<div class="well result-box nomargin">' in c:
-            price = c.split('<p class="nomargin">')[1].split('</p>')[0].replace('\\xc2\\xa3', '').replace('$', '')
-            case_name = c.split('<h4>')[1].split('</h4>')[0].replace('amp;', '')
-            cases.append(ast.literal_eval(f'["{case_name}","{price}"]'))
     print(cases)
 
     for case in cases:
@@ -59,9 +78,14 @@ def cases(out):
             dic = ast.literal_eval(dic)  # Creates a list of all the items in the case
             dic = dic[0:len(dic) - 3]
             for i in range(0, len(dic)):
-                gun = (dic[i]['value']).replace('\\u2665', '')
-                rareness = rarity[dic[i]['color']]
-                items.append([gun, rareness])  # Adds each run and its rarity to the list
+                print("Loop")
+                if not dic[i]['color'] == "99ccff":
+                    gun = (dic[i]['value']).replace('\\u2665', '')
+                    rareness = rarity[dic[i]['color']]
+                    items.append([gun, rareness])  # Adds each run and its rarity to the list
+                else:
+                    print("ERROR colour value")
+                    continue
             print(f'[Case_Compiler] ~ {case[0]}, {items_web}, took {time.time() - start_time} seconds')
         except IndexError as e:
             print('Ignoring ' + case[0], e)
